@@ -1,0 +1,26 @@
+clc; clear;
+filePath = 'C:\Users\ycth8\Desktop\32_ecotype_Fall_2017_Round1_Rep1_CS76259_2017-11-22_13-16_top.jpg';
+img = imread(filePath);
+s = LeafProcessor(img, []);
+s = s.setPixelPerCM(75);
+figure;imshow(img);title('Original Top Image');[x, y]=ginput(4);
+s = s.collectTopSampleColors(img, x, y);
+s = s.generateTopColorCorelationalMatrix();
+s.generateTopColorCorrectedImage();
+s.generateTopNormalizedImage();
+figure;imshow(s.generateTopGreenMask());title('Top Green Mask');
+s.generateTopForegroundImage();
+s.generateTopBWForegroundImage();
+figure;imshow(s.generateTopGradientMagnitudeImage());title('Top Gradient Magnitude Image');
+s.generateTopLeavesCutImage();
+[foreground_area, number_of_leaves, leaves_details, top_leaves_labeled_image, top_leaves_text_labeled_image] = s.generateTopLeavesCountedImage();
+figure;imshow(top_leaves_labeled_image);title('Top Leaves Labeled Image');
+figure;imshow(top_leaves_text_labeled_image);title('Top Leaves Text Labeled Image');
+fprintf('\n\nNumber of leaves: %d\n\n' , number_of_leaves);
+
+s.exportTopColorCorrectedImage(filePath);
+s.exportTopGreenMask(filePath);
+s.exportTopForegroundImage(filePath);
+s.exportTopLeavesCutImage(filePath);
+s.exportTopLeavesTextLabeledImage(filePath);
+s.exportLeavesData(filePath, foreground_area, number_of_leaves, leaves_details);
